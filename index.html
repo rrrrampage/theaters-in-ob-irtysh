@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Театры Сибири: Афиша и информация | Омск, Новосибирск, Томск, Барнаул</title>
+    <meta name="description" content="Портал театральной жизни Сибири. Афиши, репертуар и описание театров в бассейне Оби и Иртыша. Омск, Новосибирск, Томск, Барнаул, Тюмень.">
+    <meta name="keywords" content="театры Сибири, театр Омск, театр Новосибирск, афиша Томск, театр Барнаул, культурный портал Сибирь, купить билеты театр">
+    <meta property="og:title" content="Театры Сибири - Информационный портал">
+    <meta property="og:description" content="Всё о театральной жизни в Омске, Новосибирске, Томске и других городах региона.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/32/1032/1032750.png">
+    <meta name="description" content="Портал театрального искусства бассейна рек Обь и Иртыш">
+    <title>Театр в бассейне Оби и Иртыша</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        /* ПРЕЛОАДЕР */
+        #page-preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+
+        #page-preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-spinner {
+            width: 70px;
+            height: 70px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-progress {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .loader-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .loader-text {
+            color: rgba(255,255,255,0.8);
+            margin-top: 12px;
+            font-size: 0.95rem;
+        }
+
+        /* ОВЕРЛЕЙ ГОРОДА */
+        #city-check-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #city-check-overlay.active {
+            display: flex;
+        }
+
+        .city-card {
+            background: linear-gradient(145deg, #2a2a4a, #1e1e3a);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        .city-card h2 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .city-card p {
+            margin-bottom: 20px;
+            opacity: 0.85;
+        }
+
+        .city-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        .city-input::placeholder { color: rgba(255,255,255,0.5); }
+        .city-input:focus { border-color: #4CAF50; }
+        .city-input.error {
+            border-color: #ff6b6b;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            min-height: 22px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .city-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .city-submit:hover { transform: translateY(-2px); }
+
+        .city-hint {
+            margin-top: 18px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        #city-check-overlay.unlocking {
+            animation: fadeOutUp 0.4s ease forwards;
+        }
+
+        @keyframes fadeOutUp {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        /* ОСНОВНОЙ КОНТЕНТ */
+        #main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            display: none;
+        }
+
+        #main-content.loaded {
+            opacity: 1;
+            display: block;
+        }
+
+        /* ШАПКА */
+        .site-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .site-header::before {
+            content: '🎭';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .site-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .site-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        #user-city-display {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* НАВИГАЦИЯ */
+        /* Улучшенная навигация */
+/* Основная навигация */
+.main-nav {
+    background: white;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 12px 20px;
+    flex-wrap: wrap;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea15, #764ba215);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.nav-link:hover {
+    color: #667eea;
+    transform: translateY(-2px);
+}
+
+.nav-link:hover::before {
+    opacity: 1;
+}
+
+.nav-link:active {
+    transform: translateY(0);
+}
+
+.nav-icon {
+    font-size: 1.2rem;
+    transition: transform 0.3s;
+}
+
+.nav-link:hover .nav-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+/* Активная ссылка */
+.nav-link.active {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.nav-link.active .nav-icon {
+    transform: scale(1.1);
+}
+
+/* Мобильное меню — ГОРИЗОНТАЛЬНОЕ СНИЗУ */
+@media (max-width: 768px) {
+    .main-nav {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.12);
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        border-bottom: none;
+        border-top: 1px solid rgba(102, 126, 234, 0.15);
+    }
+    
+    .nav-container {
+        justify-content: space-around;
+        padding: 8px 5px;
+        gap: 0;
+    }
+    
+    .nav-link {
+        flex-direction: column;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        gap: 4px;
+        min-width: unset;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .nav-icon {
+        font-size: 1.3rem;
+    }
+    
+    /* Отступ для контента снизу */
+    #main-content {
+        padding-bottom: 75px;
+    }
+    
+    .section {
+        scroll-margin-top: 80px;
+    }
+}
+
+/* Планшет */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .nav-link {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Анимация появления меню при скролле */
+.main-nav.scrolled {
+    animation: slideDown 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Исправление для предотвращения наложения */
+.section {
+    scroll-margin-top: 100px;
+}
+
+        /* КОНТЕНТ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin: 25px 0 15px;
+        }
+
+        /* КАРТОЧКИ ТЕАТРОВ */
+        .theaters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .theater-card {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #dee2e6;
+        }
+
+        .theater-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        /* Заменяем старые стили эмодзи-блоков */
+.theater-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f4f4f4;
+    position: relative;
+}
+
+.theater-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+}
+
+.theater-card:hover .theater-image img {
+    transform: scale(1.05);
+}
+
+/* Фоллбэк, если картинка не загрузилась */
+.theater-image::after {
+    content: "🎭";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 60px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+        .theater-info {
+            padding: 20px;
+        }
+
+        .theater-info h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .theater-info p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .theater-link {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+
+        .theater-link:hover {
+            transform: scale(1.05);
+        }
+
+        .city-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .city-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* ССЫЛКИ */
+        .links-list {
+            list-style: none;
+        }
+
+        .links-list li {
+            margin-bottom: 10px;
+        }
+
+        .links-list a {
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .links-list a:hover {
+            text-decoration: underline;
+        }
+
+        /* КОНТАКТЫ */
+        .contacts {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: background 0.3s;
+        }
+
+        .contact-item:hover {
+            background: #e9ecef;
+        }
+
+        .contact-icon {
+            font-size: 24px;
+        }
+
+
+        /* ИСПРАВЛЕНИЕ КНОПКИ ПОИСКА */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* Перенос на мобильных */
+}
+
+.search-box input {
+    flex: 1;
+    min-width: 200px; /* Минимальная ширина */
+    padding: 12px 18px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.search-box button {
+    padding: 12px 28px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    white-space: nowrap; /* Чтобы текст не переносился */
+}
+
+/* На очень маленьких экранах кнопка под полем */
+@media (max-width: 480px) {
+    .search-box {
+        flex-direction: column;
+    }
+    
+    .search-box input,
+    .search-box button {
+        width: 100%;
+    }
+    
+    .search-box button {
+        padding: 14px;
+    }
+}
+
+/* УМЕНЬШЕННОЕ НИЖНЕЕ МЕНЮ */
+@media (max-width: 768px) {
+    .main-nav {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        border-top: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    .nav-container {
+        justify-content: space-around;
+        padding: 5px 2px; /* Меньше отступы */
+        gap: 0;
+    }
+    
+    .nav-link {
+        flex-direction: column;
+        padding: 5px 6px; /* Уменьшили padding */
+        font-size: 0.65rem; /* Меньше текст */
+        gap: 2px; /* Меньше расстояние между иконкой и текстом */
+        min-width: unset;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .nav-icon {
+        font-size: 1.1rem; /* Меньше иконки */
+    }
+    
+    /* Отступ для контента снизу */
+    #main-content {
+        padding-bottom: 65px; /* Меньше отступ */
+    }
+    
+    .section {
+        scroll-margin-top: 80px;
+    }
+}
+
+/* Для очень маленьких экранов (до 360px) */
+@media (max-width: 360px) {
+    .nav-link {
+        padding: 4px 4px;
+        font-size: 0.6rem;
+    }
+    
+    .nav-icon {
+        font-size: 1rem;
+    }
+    
+    #main-content {
+        padding-bottom: 60px;
+    }
+}
+
+        /* ФУТЕР */
+        .site-footer {
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        /* АДАПТИВНОСТЬ */
+        @media (max-width: 768px) {
+            .site-header h1 { font-size: 1.8rem; }
+            .theaters-grid { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; text-align: center; }
+            .section { padding: 20px; }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ПРЕЛОАДЕР -->
+    <div id="page-preloader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Загрузка ресурсов...</div>
+        <div class="loader-progress">
+            <div class="loader-progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+
+    <!-- ОВЕРЛЕЙ ГОРОДА -->
+    <div id="city-check-overlay">
+        <div class="city-card">
+            <h2>🌍 Доступ к сайту</h2>
+            <p>Для продолжения введите название вашего города на русском языке. Сайт доступен только для пользователей из России.</p>
+            <input type="text" class="city-input" id="city-input" placeholder="Например: Омск, Москва, Казань" autocomplete="off">
+            <div class="error-msg" id="error-msg"></div>
+            <button class="city-submit" id="city-submit">Продолжить →</button>
+            <div class="city-hint">💡 Поддерживаются названия с дефисом: Санкт-Петербург, Ростов-на-Дону, Нижний Новгород</div>
+        </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <div id="main-content">
+        <!-- ШАПКА -->
+        <header class="site-header">
+            <h1>Театральное искусство в бассейне Оби и Иртыша</h1>
+            <p>Информационный портал о театральной жизни Сибири</p>
+            <div id="user-city-display"></div>
+        </header>
+
+        <!-- НАВИГАЦИЯ -->
+        <nav class="main-nav">
+    <div class="nav-container">
+        <a href="#about" class="nav-link">
+            <span class="nav-icon">📖</span>
+            <span>О проекте</span>
+        </a>
+        <a href="#theaters" class="nav-link">
+            <span class="nav-icon">🎭</span>
+            <span>Театры</span>
+        </a>
+        <a href="#education" class="nav-link">
+            <span class="nav-icon">🎓</span>
+            <span>Образование</span>
+        </a>
+        <a href="#contacts" class="nav-link">
+            <span class="nav-icon">📞</span>
+            <span>Контакты</span>
+        </a>
+    </div>
+</nav>
+
+        <div class="container">
+            <!-- О ПРОЕКТЕ -->
+            <section id="about" class="section">
+                <h2>О проекте</h2>
+                <p>Портал собирает сведения о театральной жизни региона бассейна рек Обь и Иртыш — Новосибирск, Омск, Томск, Барнаул и сопредельные территории. Здесь вы найдёте исторические справки, афиши, описания театров и возможности образовательных программ.</p>
+                
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Быстрый поиск театров и событий...">
+                    <button onclick="searchTheaters()">Найти</button>
+                </div>
+                <div class="search-results" id="search-results">
+                    Результаты поиска появятся здесь
+                </div>
+            </section>
+
+            <!-- ТЕАТРЫ -->
+            <section id="theaters" class="section">
+                <h2>Главные театры региона</h2>
+
+               <div class="theaters-grid">
+    <!-- Омск -->
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://kultura55.ru/sites/default/files/%D0%9C%D1%83%D0%B7%D1%8B%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9.jpg" 
+                 alt="Омский академический театр драмы" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Омский академический театр драмы</h4>
+            <p>Драматический репертуар, классика и современная драматургия</p>
+            <a href="https://omskdrama.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://kultura55.ru/sites/default/files/%D0%90%D1%80%D0%BB%D0%B5%D0%BA%D0%B8%D0%BD.jpg" 
+                 alt="Театр «Арлекин»" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Омский театр «Арлекин»</h4>
+            <p>Лёгкие комедии, музыкальные спектакли, репертуар для семейной публики</p>
+            <a href="https://arlekin-omsk.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <!-- Новосибирск -->
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://daichi.ru/upload/iblock/954/yatk97gms8yhm1s0m73expxge3h4iqu3/1.jpg" 
+                 alt="Новосибирский театр оперы и балета" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Новосибирский театр оперы и балета</h4>
+            <p>Крупнейший оперно-балетный центр Сибири</p>
+            <a href="https://novat.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://cdn.culture.ru/images/e98bebca-3855-5777-934c-7725b8cf84a7" 
+                 alt="Театр «Глобус»" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Новосибирский театр «Глобус»</h4>
+            <p>Современная драматургия, экспериментальные проекты</p>
+            <a href="https://www.globus-nsk.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <!-- Томск -->
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/8c/64/ac/caption.jpg?w=1200&h=-1&s=1" 
+                 alt="Томский драматический театр" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Томский драматический театр</h4>
+            <p>Активная студенческая сцена, экспериментальные проекты</p>
+            <a href="https://www.tomskdrama.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://avatars.mds.yandex.net/get-altay/1784518/2a0000016ae316db03a211287d27239e22b8/L_height" 
+                 alt="Театр «Ангажемент»" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Молодой театр «Ангажемент»</h4>
+            <p>Экспериментальная сценография, современная драматургия</p>
+            <a href="https://xn--80aaalheag9cfg1axck.xn--p1ai/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+
+    <!-- Барнаул -->
+    <div class="theater-card">
+        <div class="theater-image">
+            <img src="https://tolknews.ru/projects/god-teatra-v-rossii-2019/altayskiy-kraevoy-teatr-dramy-im-vasiliya-makarovicha-shukshina/images/tild3765-6530-4165-a362-323230383037__1.jpg" 
+                 alt="Алтайский краевой драмтеатр" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="theater-info">
+            <h4>Алтайский краевой драматический театр</h4>
+            <p>Репертуар с учётом местных фольклорных традиций</p>
+            <a href="https://altdrama.ru/" target="_blank" class="theater-link">Официальный сайт</a>
+        </div>
+    </div>
+</div>
+
+            <!-- ОБРАЗОВАНИЕ -->
+            <section id="education" class="section">
+                <h2>🎓 Образование и школы</h2>
+                <p>В регионе работают консерватории и театральные училища, студенческие театры и творческие лаборатории.</p>
+                
+                <h3>Популярные направления:</h3>
+                <ul class="links-list">
+                    <li>🎭 Актёрское мастерство</li>
+                    <li>🎬 Режиссура</li>
+                    <li>🎨 Сценография</li>
+                    <li>🎵 Вокал и хореография</li>
+                </ul>
+
+                <h3>Учебные заведения:</h3>
+                <ul class="links-list">
+                    <li>🎓 Новосибирская консерватория — опера и вокал</li>
+                    <li>🎓 Театральные факультеты вузов Томска и Омска</li>
+                    <li>🎓 Курсы и мастер-классы для молодёжи и независимых постановок</li>
+                </ul>
+            </section>
+
+            <!-- ВИДЕО -->
+            <section class="section">
+                <h2>🎥 Видео о культуре и театрах</h2>
+                <div class="theaters-grid">
+                    <div class="theater-card">
+                        <div class="theater-info">
+                            <h4>Видео про Омские театры</h4>
+                            <a href="https://www.bing.com/search?q=Видео+про+Омские+театры" target="_blank" class="theater-link">Смотреть</a>
+                        </div>
+                    </div>
+                    <div class="theater-card">
+                        <div class="theater-info">
+                            <h4>Видео про Томские театры</h4>
+                            <a href="https://rutube.ru/video/0304a372469a802a61d9d4396a8fd5b6/" target="_blank" class="theater-link">Смотреть</a>
+                        </div>
+                    </div>
+                    <div class="theater-card">
+                        <div class="theater-info">
+                            <h4>Видео про Новосибирские театры</h4>
+                            <a href="https://www.bing.com/search?q=Видео+про+Новосибирские+театры" target="_blank" class="theater-link">Смотреть</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ПОЛЕЗНЫЕ ССЫЛКИ -->
+            <section class="section">
+                <h2>🔗 Полезные ссылки</h2>
+                <ul class="links-list">
+                    <li><a href="https://культуранск.рф/" target="_blank">📌 Культурный портал Новосибирска</a></li>
+                    <li><a href="https://культура55.ру/" target="_blank">📌 Культурный портал Омска</a></li>
+                    <li><a href="https://depkult.tomsk.gov.ru/" target="_blank">📌 Культурный портал Томска</a></li>
+                    <li><a href="#">📌 Фестивали и театральные лаборатории региона</a></li>
+                </ul>
+            </section>
+
+            <!-- КОНТАКТЫ -->
+            <section id="contacts" class="section">
+                <h2>📞 Контакты и ресурсы</h2>
+                <p>Официальные сайты театров ищите по названию. Афиши и билеты доступны на порталах продаж и в соцсетях театров.</p>
+                
+                <div class="contacts">
+                    <a href="mailto:theatre-in-ob-irtysh@gmail.com" class="contact-item">
+                        <span class="contact-icon" style="font-size: medium;">📧 theatreinobirtysh@gmail.com</span>
+                        <span></span>
+                    </a>
+                    <a href="#" class="contact-item">
+                        <span class="contact-icon">📱</span>
+                        <span>Phone</span>
+                    </a>
+                    <a href="https://t.me/kevindurex" target="_blank" class="contact-item">
+                        <span class="contact-icon">✈️</span>
+                        <span>Telegram</span>
+                    </a>
+                </div>
+                
+                <div style="margin-top: 30px; padding: 20px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>💡 Нашли ошибку или нужна поддержка в поиске?</strong>
+                    <p style="margin-top: 10px;">Напишите письмо или сообщение нам!</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- ФУТЕР -->
+        <footer class="site-footer">
+            <p>© 2026 Портал театрального искусства бассейна Оби и Иртыша — информационный ресурс</p>
+            <p style="margin-top: 10px; opacity: 0.8; font-size: 0.9rem;">Все права защищены</p>
+        </footer>
+    </div>
+
+    <script>
+        // ИМИТАЦИЯ ЗАГРУЗКИ
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('page-preloader');
+            const progressBar = document.getElementById('progress-bar');
+            const cityOverlay = document.getElementById('city-check-overlay');
+            const mainContent = document.getElementById('main-content');
+            
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                progressBar.style.width = `${progress}%`;
+            }, 200);
+
+            window.addEventListener('load', () => {
+                progressBar.style.width = '100%';
+                setTimeout(() => {
+                    clearInterval(progressInterval);
+                    preloader.classList.add('hidden');
+                    cityOverlay.classList.add('active');
+                    setTimeout(() => document.getElementById('city-input').focus(), 300);
+                    
+                }, 400);
+            });
+
+            // СПИСОК ГОРОДОВ
+            const russianCities = new Set([
+                'москва', 'санкт-петербург', 'новосибирск', 'екатеринбург', 'казань',
+                'нижний новгород', 'челябинск', 'омск', 'самара', 'ростов-на-дону',
+                'уфа', 'красноярск', 'воронеж', 'пермь', 'волгоград', 'краснодар',
+                'саратов', 'тюмень', 'тольятти', 'ижевск', 'барнаул', 'иркутск',
+                'ульяновск', 'хабаровск', 'ярославль', 'владивосток', 'махачкала',
+                'томск', 'оренбург', 'кемерово', 'новокузнецк', 'рязань', 'набережные челны',
+                'астрахань', 'пенза', 'липецк', 'киров', 'чебоксары', 'тула', 'калининград'
+            ]);
+
+            function isValidRussianCityName(str) {
+                return /^[\u0400-\u04FF\s\-]{2,50}$/.test(str.trim());
+            }
+
+            function isKnownCity(city) {
+                return russianCities.has(city.toLowerCase().trim());
+            }
+
+            const cityInput = document.getElementById('city-input');
+            const citySubmit = document.getElementById('city-submit');
+            const errorMsg = document.getElementById('error-msg');
+
+            function showError(message) {
+                errorMsg.textContent = message;
+                cityInput.classList.add('error');
+                setTimeout(() => cityInput.classList.remove('error'), 300);
+            }
+
+            function validateCity() {
+                const city = cityInput.value.trim();
+                errorMsg.textContent = '';
+
+                if (!city) {
+                    showError('⚠️ Введите название города');
+                    return false;
+                }
+                if (!isValidRussianCityName(city)) {
+                    showError('❌ Только русские буквы, пробелы и дефис');
+                    return false;
+                }
+                if (!isKnownCity(city)) {
+                    showError(`❌ Город "${city}" не найден. Проверьте написание`);
+                    return false;
+                }
+                return true;
+            }
+
+            function unlockSite(city) {
+                cityOverlay.classList.add('unlocking');
+                setTimeout(() => {
+                    cityOverlay.style.display = 'none';
+                    mainContent.classList.add('loaded');
+                    localStorage.setItem('userCity', city);
+                    const displayCity = city.charAt(0).toUpperCase() + city.slice(1);
+                    document.getElementById('user-city-display').textContent = `📍 ${displayCity}`;
+                    console.log('✅ Сайт разблокирован для города:', city);
+                }, 400);
+            }
+
+            citySubmit.addEventListener('click', () => {
+                if (validateCity()) unlockSite(cityInput.value.trim());
+            });
+
+            cityInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && validateCity()) {
+                    unlockSite(cityInput.value.trim());
+                }
+            });
+
+            cityInput.addEventListener('input', () => {
+                errorMsg.textContent = '';
+                cityInput.classList.remove('error');
+            });
+        });
+
+        // ПОИСК
+        function searchTheaters() {
+            const query = document.getElementById('search-input').value.toLowerCase().trim();
+            const resultsDiv = document.getElementById('search-results');
+            
+            if (!query) {
+                resultsDiv.innerHTML = '<p>Введите поисковый запрос</p>';
+                return;
+            }
+
+            const theaters = [
+                { name: 'Омский академический театр драмы', city: 'Омск', desc: 'Драматический репертуар' },
+                { name: 'Омский театр «Арлекин»', city: 'Омск', desc: 'Музыкально-драматический' },
+                { name: 'Новосибирский театр оперы и балета', city: 'Новосибирск', desc: 'Опера и балет' },
+                { name: 'Новосибирский театр «Глобус»', city: 'Новосибирск', desc: 'Современная драматургия' },
+                { name: 'Томский драматический театр', city: 'Томск', desc: 'Драма' },
+                { name: 'Томский театр «Ангажемент»', city: 'Томск', desc: 'Молодёжный театр' },
+                { name: 'Томский ТЮЗ', city: 'Томск', desc: 'Театр юного зрителя' },
+                { name: 'Алтайский краевой драматический театр', city: 'Барнаул', desc: 'Драма' }
+            ];
+
+            const filtered = theaters.filter(t => 
+                t.name.toLowerCase().includes(query) || 
+                t.city.toLowerCase().includes(query) ||
+                t.desc.toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = '<p>Ничего не найдено</p>';
+            } else {
+                resultsDiv.innerHTML = filtered.map(t => 
+                    `<div style="padding: 10px; border-bottom: 1px solid #ddd;">
+                        <strong>${t.name}</strong> (${t.city})<br>
+                        <small>${t.desc}</small>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        document.getElementById('search-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchTheaters();
+        });
+
+        // Подсветка активной ссылки при скролле
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (scrollY >= (sectionTop - 150)) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+            link.classList.add('active');
+        }
+    });
+    
+    // Добавляем класс для анимации меню
+    const nav = document.querySelector('.main-nav');
+    if (window.scrollY > 100) {
+        nav.classList.add('scrolled');
+    } else {
+        nav.classList.remove('scrolled');
+    }
+});
+
+// Плавный скролл при клике на ссылки
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const offsetTop = target.offsetTop - 100;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+    </script>
+</body>
+</html>
