@@ -322,50 +322,48 @@
     transform: scale(1.1);
 }
 
-/* Мобильное меню — ГОРИЗОНТАЛЬНОЕ ВНИЗУ */
+/* Мобильное меню — ГОРИЗОНТАЛЬНОЕ СНИЗУ */
 @media (max-width: 768px) {
     .main-nav {
         position: fixed;
-        top: auto;
         bottom: 0;
+        top: auto;
         left: 0;
         right: 0;
-        box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.12);
         z-index: 1000;
         background: rgba(255, 255, 255, 0.98);
-        border-top: 1px solid rgba(102, 126, 234, 0.1);
         border-bottom: none;
+        border-top: 1px solid rgba(102, 126, 234, 0.15);
     }
     
     .nav-container {
-        justify-content: center;
-        padding: 10px 15px;
-        gap: 8px;
-        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 8px 5px;
+        gap: 0;
     }
     
     .nav-link {
-        flex-direction: row;
-        padding: 10px 16px;
-        font-size: 0.85rem;
-        gap: 6px;
+        flex-direction: column;
+        padding: 6px 10px;
+        font-size: 0.7rem;
+        gap: 4px;
         min-width: unset;
-        flex: 0 1 auto;
+        flex: 1;
         justify-content: center;
     }
     
     .nav-icon {
-        font-size: 1.1rem;
+        font-size: 1.3rem;
     }
     
     /* Отступ для контента снизу */
     #main-content {
-        padding-bottom: 70px;
+        padding-bottom: 75px;
     }
     
     .section {
-        scroll-margin-top: 20px;
-        scroll-margin-bottom: 70px;
+        scroll-margin-top: 80px;
     }
 }
 
@@ -618,7 +616,65 @@
     }
 }
 
+/* УМЕНЬШЕННОЕ НИЖНЕЕ МЕНЮ */
+@media (max-width: 768px) {
+    .main-nav {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        right: 0;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        border-top: 1px solid rgba(102, 126, 234, 0.1);
+    }
+    
+    .nav-container {
+        justify-content: space-around;
+        padding: 5px 2px; /* Меньше отступы */
+        gap: 0;
+    }
+    
+    .nav-link {
+        flex-direction: column;
+        padding: 5px 6px; /* Уменьшили padding */
+        font-size: 0.65rem; /* Меньше текст */
+        gap: 2px; /* Меньше расстояние между иконкой и текстом */
+        min-width: unset;
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .nav-icon {
+        font-size: 1.1rem; /* Меньше иконки */
+    }
+    
+    /* Отступ для контента снизу */
+    #main-content {
+        padding-bottom: 65px; /* Меньше отступ */
+    }
+    
+    .section {
+        scroll-margin-top: 80px;
+    }
+}
 
+/* Для очень маленьких экранов (до 360px) */
+@media (max-width: 360px) {
+    .nav-link {
+        padding: 4px 4px;
+        font-size: 0.6rem;
+    }
+    
+    .nav-icon {
+        font-size: 1rem;
+    }
+    
+    #main-content {
+        padding-bottom: 60px;
+    }
+}
 
         /* ФУТЕР */
         .site-footer {
@@ -633,9 +689,29 @@
         @media (max-width: 768px) {
             .site-header h1 { font-size: 1.8rem; }
             .theaters-grid { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; text-align: center; }
             .section { padding: 20px; }
         }
         
+        /* Стили для Яндекс.Карты */
+#yandex-map {
+    width: 100%;
+    height: 600px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    #yandex-map {
+        height: 400px;
+    }
+}
+
+/* Стили для балуна (всплывающего окна) */
+.ymaps-2-1-79-balloon__content {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
     </style>
 </head>
 <body>
@@ -680,6 +756,10 @@
         <a href="#theaters" class="nav-link">
             <span class="nav-icon">🎭</span>
             <span>Театры</span>
+        </a>
+        <a href="#map-section" class="nav-link">
+            <span class="nav-icon">🗺️</span>
+            <span>Карта</span>
         </a>
         <a href="#education" class="nav-link">
             <span class="nav-icon">🎓</span>
@@ -808,6 +888,12 @@
     </div>
 </div>
 
+<!-- ИНТЕРАКТИВНАЯ КАРТА ЯНДЕКС -->
+<section id="map-section" class="section">
+    <h2>🗺️ Карта театров региона</h2>
+    <p style="margin-bottom: 20px; color: #666;">Нажмите на метку, чтобы увидеть информацию о театре</p>
+    <div id="yandex-map" style="width: 100%; height: 600px; border-radius: 12px;"></div>
+</section>
             <!-- ОБРАЗОВАНИЕ -->
             <section id="education" class="section">
                 <h2>🎓 Образование и школы</h2>
@@ -898,6 +984,8 @@
             <p style="margin-top: 10px; opacity: 0.8; font-size: 0.9rem;">Все права защищены</p>
         </footer>
     </div>
+    <!-- Яндекс.Карты API -->
+<script src="https://api-maps.yandex.ru/2.1/?apikey=da42f20b-e3d6-4bbe-bb57-aa87f1b2c3dd&lang=ru_RU" type="text/javascript"></script>
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
@@ -1103,6 +1191,153 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Инициализация Яндекс.Карты
+ymaps.ready(initMap);
+
+function initMap() {
+    // Создание карты (центр - примерно Новосибирск)
+    const myMap = new ymaps.Map("yandex-map", {
+        center: [55.0, 82.9], // Координаты центра карты
+        zoom: 6,
+        controls: ['zoomControl', 'fullscreenControl', 'typeSelector']
+    });
+
+    // Данные о театрах
+    const theaters = [
+        // Омск
+        {
+            name: 'Омский академический театр драмы',
+            coords: [54.9885, 73.3686],
+            description: 'Драматический репертуар, классика и современная драматургия',
+            url: 'https://omskdrama.ru/',
+            icon: '🎭'
+        },
+        {
+            name: 'Омский театр «Арлекин»',
+            coords: [54.9920, 73.3720],
+            description: 'Лёгкие комедии, музыкальные спектакли',
+            url: 'https://arlekin-omsk.ru/',
+            icon: '🎨'
+        },
+        {
+            name: 'Омский государственный музыкальный театр',
+            coords: [54.9900, 73.3700],
+            description: 'Оперные и балетные постановки',
+            url: '#',
+            icon: '🎵'
+        },
+        
+        // Новосибирск
+        {
+            name: 'Новосибирский театр оперы и балета',
+            coords: [55.0302, 82.9204],
+            description: 'Крупнейший оперно-балетный центр Сибири',
+            url: 'https://novat.ru/',
+            icon: '🎭'
+        },
+        {
+            name: 'Новосибирский театр «Глобус»',
+            coords: [55.0280, 82.9150],
+            description: 'Современная драматургия, экспериментальные проекты',
+            url: 'https://www.globus-nsk.ru/',
+            icon: '🎬'
+        },
+        {
+            name: 'Театр «Старый дом»',
+            coords: [55.0310, 82.9180],
+            description: 'Один из старейших театров России',
+            url: 'https://www.oldhouse.ru/',
+            icon: '🎪'
+        },
+        
+        // Томск
+        {
+            name: 'Томский драматический театр',
+            coords: [56.4720, 84.9680],
+            description: 'Активная студенческая сцена',
+            url: 'https://www.tomskdrama.ru/',
+            icon: '🎭'
+        },
+        {
+            name: 'Молодой театр «Ангажемент»',
+            coords: [56.4750, 84.9720],
+            description: 'Экспериментальная сценография',
+            url: 'https://xn--80aaalheag9cfg1axck.xn--p1ai/',
+            icon: '🎨'
+        },
+        {
+            name: 'Томский ТЮЗ',
+            coords: [56.4700, 84.9650],
+            description: 'Спектакли для детей и подростков',
+            url: 'https://tuz-tomsk.ru/',
+            icon: '🎪'
+        },
+        
+        // Барнаул
+        {
+            name: 'Алтайский краевой драматический театр',
+            coords: [53.3606, 83.7636],
+            description: 'Фольклорные традиции и современные постановки',
+            url: 'https://altdrama.ru/',
+            icon: '🎭'
+        },
+        
+        // Тюмень
+        {
+            name: 'Тюменский драматический театр',
+            coords: [57.1530, 65.5340],
+            description: 'Классический репертуар',
+            url: 'https://dramteatr.ru/',
+            icon: '🎭'
+        },
+        
+        // Кемерово
+        {
+            name: 'Кемеровский театр драмы',
+            coords: [55.3330, 86.0830],
+            description: 'Областной драматический театр',
+            url: '#',
+            icon: '🎭'
+        }
+    ];
+
+    // Добавление меток на карту
+    theaters.forEach(theater => {
+        const placemark = new ymaps.Placemark(
+            theater.coords,
+            {
+                hintContent: theater.name,
+                balloonContentHeader: theater.name,
+                balloonContentBody: `
+                    <div style="padding: 10px;">
+                        <p style="margin: 0 0 10px 0; color: #666;">${theater.description}</p>
+                        ${theater.url !== '#' ? 
+                            `<a href="${theater.url}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                                Официальный сайт →
+                            </a>` : 
+                            ''
+                        }
+                    </div>
+                `,
+                balloonContentFooter: theater.icon
+            },
+            {
+                // Опции метки
+                preset: 'islands#violetTheatreIcon',
+                iconColor: '#667eea'
+            }
+        );
+
+        myMap.geoObjects.add(placemark);
+    });
+
+    // Автоматическое масштабирование для показа всех меток
+    myMap.setBounds(myMap.geoObjects.getBounds(), {
+        checkZoomRange: true,
+        zoomMargin: 50
+    });
+}
     </script>
 </body>
 </html>
