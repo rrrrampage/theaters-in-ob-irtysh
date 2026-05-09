@@ -801,6 +801,59 @@
         padding-bottom: 65px;
     }
 }
+/* Кнопка "Наверх" */
+.scroll-top-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 25px;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transition: opacity 0.3s, transform 0.3s, visibility 0.3s, box-shadow 0.3s;
+  z-index: 999;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.scroll-top-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.scroll-top-btn:active {
+  transform: scale(0.95);
+}
+
+/* Адаптация под мобильные (отступ от нижнего меню) */
+@media (max-width: 768px) {
+  .scroll-top-btn {
+    bottom: 95px; /* Над навигацией */
+    right: 10px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .scroll-top-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
     </style>
 </head>
 <body>
@@ -1086,6 +1139,12 @@
             <p style="margin-top: 10px; opacity: 0.8; font-size: 0.9rem;">Все права защищены</p>
         </footer>
     </div>
+    <!-- Кнопка "Наверх" -->
+<button id="scrollTopBtn" class="scroll-top-btn" aria-label="Вернуться наверх">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
     <!-- Яндекс.Карты API -->
 <script src="https://api-maps.yandex.ru/2.1/?apikey=da42f20b-e3d6-4bbe-bb57-aa87f1b2c3dd&lang=ru_RU" type="text/javascript"></script>
 <!-- Yandex.Metrika counter -->
@@ -1440,6 +1499,24 @@ function initMap() {
         zoomMargin: 200
     });
 }
+// Логика кнопки "Наверх"
+document.addEventListener('DOMContentLoaded', () => {
+  const scrollBtn = document.getElementById('scrollTopBtn');
+  
+  // Показываем/скрываем при скролле
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      scrollBtn.classList.add('visible');
+    } else {
+      scrollBtn.classList.remove('visible');
+    }
+  }, { passive: true });
+  
+  // Плавный скролл наверх
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
     </script>
 </body>
 </html>
