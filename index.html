@@ -195,46 +195,137 @@
         }
 
         /* ШАПКА */
-        .site-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+        /* Настройки слайдера */
+:root {
+  --slider-height: 80vh;
+  --transition-speed: 0.8s;
+  --accent-color: #667eea;
+}
 
-        .site-header::before {
-            content: '🎭';
-            position: absolute;
-            font-size: 200px;
-            opacity: 0.1;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
+.slider {
+  position: relative;
+  width: 100%;
+  height: var(--slider-height);
+  overflow: hidden;
+  background: #111;
+}
 
-        .site-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
+.slider__track {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
 
-        .site-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity var(--transition-speed) ease-in-out;
+  z-index: 1;
+}
 
-        #user-city-display {
-            margin-top: 15px;
-            padding: 8px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 20px;
-            display: inline-block;
-        }
+.slide.active {
+  opacity: 1;
+  z-index: 2;
+}
+
+/* Мягкое появление первого слайда при загрузке */
+.slide:first-child {
+  animation: softEntrance 1.2s ease-out forwards;
+}
+
+@keyframes softEntrance {
+  from { opacity: 0; filter: brightness(0.8); }
+  to   { opacity: 1; filter: brightness(1); }
+}
+
+.slider__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
+  z-index: 3;
+}
+
+.slider__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+  z-index: 4;
+  padding: 0 20px;
+  pointer-events: none; /* Пропускаем клики на слайдер */
+}
+
+.slider__content > * {
+  pointer-events: auto;
+}
+
+.slider__content h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0 0 0.5rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  opacity: 0;
+  animation: fadeUp 0.9s ease-out 0.3s forwards;
+}
+
+.slider__content p {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  opacity: 0;
+  max-width: 650px;
+  line-height: 1.5;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  animation: fadeUp 0.9s ease-out 0.6s forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Индикаторы (точки) */
+.slider__controls {
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 5;
+}
+
+.slider__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: 2px solid rgba(255,255,255,0.6);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.slider__dot.active {
+  background: #fff;
+  transform: scale(1.25);
+  border-color: #fff;
+}
+
+.slider__dot:hover {
+  background: rgba(255,255,255,0.8);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  :root { --slider-height: 55vh; }
+  .slider__content { padding-bottom: 50px; }
+}
 
         /* НАВИГАЦИЯ */
         /* Улучшенная навигация */
@@ -883,10 +974,31 @@
     <div id="main-content">
         <!-- ШАПКА -->
         <header class="site-header">
-            <h1>Театральное искусство в бассейне Оби и Иртыша</h1>
-            <p>Информационный портал о театральной жизни Сибири</p>
-            <div id="user-city-display"></div>
-        </header>
+  <div class="slider" role="region" aria-label="Галерея театров региона">
+    <div class="slider__track">
+      <!-- Слайд 1 (загружается сразу) -->
+      <div class="slide active" style="background-image: url('..//Desktop/work/images/драма.jpg')""></div>
+      <!-- Слайд 2 -->
+      <div class="slide" style="background-image: url('..//Desktop/work/images/teatr_operi_i_baleta_v_novosibirske_3.jpg')"></div>
+      <!-- Слайд 3 -->
+      <div class="slide" style="background-image: url('..//Desktop/work/images/IMG_5857.jpg')"></div>
+    </div>
+
+    <div class="slider__overlay"></div>
+
+    <div class="slider__content">
+      <h1>Театральное искусство в бассейне Оби и Иртыша</h1>
+      <p>Информационный портал о театральной жизни Сибири</p>
+      <div id="user-city-display" class="city-badge"></div>
+    </div>
+
+    <div class="slider__controls">
+      <button class="slider__dot active" aria-label="Слайд 1"></button>
+      <button class="slider__dot" aria-label="Слайд 2"></button>
+      <button class="slider__dot" aria-label="Слайд 3"></button>
+    </div>
+  </div>
+</header>
 
         <!-- НАВИГАЦИЯ -->
         <nav class="main-nav">
@@ -1359,8 +1471,8 @@ ymaps.ready(initMap);
 function initMap() {
     // Создание карты (центр - примерно Новосибирск)
     const myMap = new ymaps.Map("yandex-map", {
-        center: [55.0, 82.9], // Координаты центра карты
-        zoom: 6,
+        center: [55.5, 82.5], // Координаты центра карты
+        zoom: 2,
         controls: ['zoomControl', 'fullscreenControl', 'typeSelector']
     });
 
@@ -1496,7 +1608,7 @@ function initMap() {
     // Автоматическое масштабирование для показа всех меток
     myMap.setBounds(myMap.geoObjects.getBounds(), {
         checkZoomRange: true,
-        zoomMargin: 200
+        zoomMargin: 200,
     });
 }
 // Логика кнопки "Наверх"
@@ -1516,6 +1628,46 @@ document.addEventListener('DOMContentLoaded', () => {
   scrollBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.slider__dot');
+  let current = 0;
+  let timer;
+  const DELAY = 5000; // 5 секунд на слайд
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    
+    current = (index + slides.length) % slides.length;
+    
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function start() { timer = setInterval(next, DELAY); }
+  function stop()  { clearInterval(timer); }
+
+  // Клик по точкам
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      goTo(i);
+      stop();
+      start();
+    });
+  });
+
+  // Пауза при наведении
+  const sliderEl = document.querySelector('.slider');
+  sliderEl.addEventListener('mouseenter', stop);
+  sliderEl.addEventListener('mouseleave', start);
+
+  // Запуск
+  start();
 });
     </script>
 </body>
