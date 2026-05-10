@@ -945,6 +945,342 @@
     height: 18px;
   }
 }
+
+/* Блок опроса на странице */
+.survey-block {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 50px 40px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+}
+
+.survey-block-header {
+  margin-bottom: 30px;
+}
+
+.survey-icon-large {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.survey-block h2 {
+  margin: 0 0 12px;
+  font-size: 2rem;
+  color: white;
+  border: none;
+}
+
+.survey-block p {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.95;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.survey-start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.survey-start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+.survey-start-btn svg {
+  transition: transform 0.3s;
+}
+
+.survey-start-btn:hover svg {
+  transform: translateX(5px);
+}
+
+/* Модальное окно */
+.survey-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.survey-modal.active {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+.survey-content {
+  background: var(--bg-secondary, #fff);
+  border-radius: 20px;
+  padding: 35px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.survey-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 36px;
+  height: 36px;
+  background: var(--bg-primary, #f5f5f5);
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: var(--text-primary, #333);
+}
+
+.survey-close:hover {
+  background: #ff6b6b;
+  color: white;
+  transform: rotate(90deg);
+}
+
+.survey-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.survey-header h2 {
+  margin: 0 0 10px;
+  color: var(--text-primary, #333);
+  font-size: 1.8rem;
+}
+
+.survey-header p {
+  margin: 0;
+  color: var(--text-secondary, #666);
+  font-size: 0.95rem;
+}
+
+.survey-question {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.survey-question.active {
+  display: block;
+}
+
+.survey-question h3 {
+  margin: 0 0 20px;
+  color: var(--text-primary, #333);
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.survey-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-card {
+  display: flex;
+  align-items: center;
+  padding: 15px 18px;
+  background: var(--bg-primary, #f8f9fa);
+  border: 2px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-card:hover {
+  border-color: var(--accent, #667eea);
+  background: rgba(102, 126, 234, 0.05);
+  transform: translateX(5px);
+}
+
+.option-card input[type="radio"],
+.option-card input[type="checkbox"] {
+  margin: 0 12px 0 0;
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent, #667eea);
+}
+
+.option-card span {
+  font-size: 0.95rem;
+  color: var(--text-primary, #333);
+}
+
+.option-card:has(input:checked) {
+  border-color: var(--accent, #667eea);
+  background: rgba(102, 126, 234, 0.1);
+  font-weight: 500;
+}
+
+.survey-select,
+.survey-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border-color, #e0e0e0);
+  border-radius: 12px;
+  font-size: 1rem;
+  background: var(--input-bg, #fff);
+  color: var(--text-primary, #333);
+  outline: none;
+  transition: all 0.3s;
+}
+
+.survey-select:focus,
+.survey-textarea:focus {
+  border-color: var(--accent, #667eea);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.survey-textarea {
+  margin-top: 15px;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.survey-navigation {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  justify-content: flex-end;
+}
+
+.survey-btn {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.prev-btn {
+  background: var(--bg-primary, #f0f0f0);
+  color: var(--text-primary, #333);
+}
+
+.prev-btn:hover {
+  background: #e0e0e0;
+}
+
+.next-btn,
+.submit-btn {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.next-btn:hover,
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.survey-progress {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-color, #e0e0e0);
+}
+
+.progress-bar {
+  height: 6px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 20%;
+}
+
+.thank-you-screen {
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.thank-you-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.thank-you-screen h2 {
+  margin: 0 0 15px;
+  color: var(--text-primary, #333);
+}
+
+.thank-you-screen p {
+  color: var(--text-secondary, #666);
+  margin-bottom: 25px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .survey-block {
+    padding: 40px 25px;
+  }
+  
+  .survey-block h2 {
+    font-size: 1.6rem;
+  }
+  
+  .survey-icon-large {
+    font-size: 3rem;
+  }
+  
+  .survey-content {
+    padding: 25px 20px;
+  }
+  
+  .survey-header h2 {
+    font-size: 1.4rem;
+  }
+}
     </style>
 </head>
 <body>
@@ -1154,7 +1490,6 @@
         </div>
     </div>
 </div>
-
 <!-- ИНТЕРАКТИВНАЯ КАРТА ЯНДЕКС -->
 <section id="map-section" class="section">
     <h2>🗺️ Карта театров региона</h2>
@@ -1181,7 +1516,6 @@
                     <li>🎓 Курсы и мастер-классы для молодёжи и независимых постановок</li>
                 </ul>
             </section>
-
             <!-- ВИДЕО -->
             <section class="section">
                 <h2>🎥 Видео о культуре и театрах</h2>
@@ -1217,6 +1551,175 @@
                     <li><a href="#">📌 Фестивали и театральные лаборатории региона</a></li>
                 </ul>
             </section>
+            <!-- СЕКЦИЯ ОПРОСА -->
+<section id="survey-section" class="section">
+  <div class="survey-block">
+    <div class="survey-block-header">
+      <div class="survey-icon-large">💬</div>
+      <h2>Помогите нам стать лучше</h2>
+      <p>Пройдите короткий опрос из 5 вопросов — это займёт всего минуту</p>
+    </div>
+    
+    <button class="survey-start-btn" onclick="openSurveyModal()">
+      Пройти опрос
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</section>
+
+<!-- МОДАЛЬНОЕ ОКНО (оставьте перед </body>) -->
+<div id="surveyModal" class="survey-modal">
+  <div class="survey-content">
+    <button class="survey-close" onclick="closeSurvey()">✕</button>
+    
+    <div class="survey-header">
+      <h2>🎭 Помогите нам стать лучше</h2>
+      <p>Ответьте на 5 вопросов (займёт 1 минуту)</p>
+    </div>
+
+    <form id="surveyForm" onsubmit="submitSurvey(event)">
+      <!-- Вопрос 1 -->
+      <div class="survey-question active" data-step="1">
+        <h3>1. Откуда вы узнали о нашем портале?</h3>
+        <div class="survey-options">
+          <label class="option-card">
+            <input type="radio" name="source" value="search" required>
+            <span>🔍 Поисковик (Яндекс/Google)</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="source" value="social">
+            <span>📱 Социальные сети</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="source" value="friend">
+            <span>👥 От друзей/знакомых</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="source" value="theater">
+            <span>🎪 В самом театре</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Вопрос 2 -->
+      <div class="survey-question" data-step="2">
+        <h3>2. Из какого вы города?</h3>
+        <select name="city" class="survey-select" required>
+          <option value="">Выберите город...</option>
+          <option value="omsk">Омск</option>
+          <option value="novosibirsk">Новосибирск</option>
+          <option value="tomsk">Томск</option>
+          <option value="barnaul">Барнаул</option>
+          <option value="tyumen">Тюмень</option>
+          <option value="kemerovo">Кемерово</option>
+          <option value="other">Другой город</option>
+        </select>
+      </div>
+
+      <!-- Вопрос 3 -->
+      <div class="survey-question" data-step="3">
+        <h3>3. Какие спектакли вы предпочитаете?</h3>
+        <div class="survey-options">
+          <label class="option-card">
+            <input type="checkbox" name="genre" value="drama">
+            <span>🎭 Драма</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="genre" value="comedy">
+            <span>😄 Комедия</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="genre" value="opera">
+            <span>🎵 Опера/Балет</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="genre" value="kids">
+            <span>👶 Детские спектакли</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="genre" value="experimental">
+            <span>🎨 Экспериментальные</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Вопрос 4 -->
+      <div class="survey-question" data-step="4">
+        <h3>4. Как часто вы посещаете театр?</h3>
+        <div class="survey-options">
+          <label class="option-card">
+            <input type="radio" name="frequency" value="often" required>
+            <span>🎟️ Раз в неделю и чаще</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="frequency" value="month">
+            <span>📅 1-2 раза в месяц</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="frequency" value="rare">
+            <span>📆 Несколько раз в год</span>
+          </label>
+          <label class="option-card">
+            <input type="radio" name="frequency" value="never">
+            <span>💤 Почти не хожу</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Вопрос 5 -->
+      <div class="survey-question" data-step="5">
+        <h3>5. Что бы вы хотели видеть на портале?</h3>
+        <div class="survey-options">
+          <label class="option-card">
+            <input type="checkbox" name="feature" value="afisha">
+            <span>📆 Актуальная афиша</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="feature" value="reviews">
+            <span>⭐ Отзывы и рейтинги</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="feature" value="discounts">
+            <span>🎁 Скидки и акции</span>
+          </label>
+          <label class="option-card">
+            <input type="checkbox" name="feature" value="online">
+            <span>🎥 Онлайн-трансляции</span>
+          </label>
+        </div>
+        <textarea name="comment" class="survey-textarea" placeholder="Ваши пожелания (необязательно)"></textarea>
+      </div>
+
+      <!-- Кнопки навигации -->
+      <div class="survey-navigation">
+        <button type="button" class="survey-btn prev-btn" onclick="changeStep(-1)" id="prevBtn" style="display: none;">
+          ← Назад
+        </button>
+        <button type="button" class="survey-btn next-btn" onclick="changeStep(1)" id="nextBtn">
+          Далее →
+        </button>
+        <button type="submit" class="survey-btn submit-btn" id="submitBtn" style="display: none;">
+          Отправить ✓
+        </button>
+      </div>
+
+      <!-- Индикатор прогресса -->
+      <div class="survey-progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </form>
+
+    <!-- Экран благодарности -->
+    <div id="thankYouScreen" class="thank-you-screen" style="display: none;">
+      <div class="thank-you-icon">🎉</div>
+      <h2>Спасибо за участие!</h2>
+      <p>Ваши ответы помогут нам сделать портал лучше</p>
+      <button class="survey-btn" onclick="closeSurvey()">Закрыть</button>
+    </div>
+  </div>
+</div>
 
             <!-- КОНТАКТЫ -->
             <section id="contacts" class="section">
@@ -1669,6 +2172,130 @@ document.addEventListener('DOMContentLoaded', () => {
   // Запуск
   start();
 });
+
+let currentStep = 1;
+const totalSteps = 5;
+
+// Открытие опроса
+function openSurveyModal() {
+  document.getElementById('surveyModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+// Закрытие опроса
+function closeSurvey() {
+  document.getElementById('surveyModal').classList.remove('active');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    resetSurvey();
+  }, 300);
+}
+
+// Переключение шагов
+function changeStep(direction) {
+  const currentQuestion = document.querySelector(`.survey-question[data-step="${currentStep}"]`);
+  const inputs = currentQuestion.querySelectorAll('input[required], select[required]');
+  let isValid = true;
+  
+  if (direction === 1) {
+    inputs.forEach(input => {
+      if (input.type === 'radio' || input.type === 'checkbox') {
+        const name = input.name;
+        const checked = currentQuestion.querySelector(`input[name="${name}"]:checked`);
+        if (!checked) isValid = false;
+      } else if (!input.value.trim()) {
+        isValid = false;
+      }
+    });
+    
+    if (!isValid) {
+      alert('Пожалуйста, ответьте на вопрос');
+      return;
+    }
+  }
+  
+  currentQuestion.classList.remove('active');
+  currentStep += direction;
+  
+  const nextQuestion = document.querySelector(`.survey-question[data-step="${currentStep}"]`);
+  nextQuestion.classList.add('active');
+  
+  updateButtons();
+  updateProgressBar();
+}
+
+function updateButtons() {
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const submitBtn = document.getElementById('submitBtn');
+  
+  prevBtn.style.display = currentStep === 1 ? 'none' : 'inline-block';
+  
+  if (currentStep === totalSteps) {
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'inline-block';
+  } else {
+    nextBtn.style.display = 'inline-block';
+    submitBtn.style.display = 'none';
+  }
+}
+
+function updateProgressBar() {
+  const progress = (currentStep / totalSteps) * 100;
+  document.getElementById('progressBar').style.width = progress + '%';
+}
+
+function submitSurvey(event) {
+  event.preventDefault();
+  
+  const formData = new FormData(event.target);
+  const data = {
+    source: formData.get('source'),
+    city: formData.get('city'),
+    genre: formData.getAll('genre'),
+    frequency: formData.get('frequency'),
+    feature: formData.getAll('feature'),
+    comment: formData.get('comment'),
+    timestamp: new Date().toISOString()
+  };
+  
+  console.log('Данные опроса:', data);
+  
+  const surveys = JSON.parse(localStorage.getItem('surveys') || '[]');
+  surveys.push(data);
+  localStorage.setItem('surveys', JSON.stringify(surveys));
+  
+  document.querySelector('#surveyForm').style.display = 'none';
+  document.getElementById('thankYouScreen').style.display = 'block';
+  
+  setTimeout(() => {
+    closeSurvey();
+  }, 3000);
+}
+
+function resetSurvey() {
+  currentStep = 1;
+  document.getElementById('surveyForm').reset();
+  document.getElementById('surveyForm').style.display = 'block';
+  document.getElementById('thankYouScreen').style.display = 'none';
+  
+  document.querySelectorAll('.survey-question').forEach(q => {
+    q.classList.remove('active');
+  });
+  document.querySelector('.survey-question[data-step="1"]').classList.add('active');
+  
+  updateButtons();
+  updateProgressBar();
+}
+
+document.getElementById('surveyModal')?.addEventListener('click', (e) => {
+  if (e.target === document.getElementById('surveyModal')) {
+    closeSurvey();
+  }
+});
+
+updateButtons();
+updateProgressBar();
     </script>
 </body>
 </html>
