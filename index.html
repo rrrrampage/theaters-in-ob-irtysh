@@ -1258,6 +1258,27 @@
   color: var(--text-secondary, #666);
   margin-bottom: 25px;
 }
+.theater-card, 
+.theater-card-3d {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.theater-card.revealed, 
+.theater-card-3d.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theater-card, .theater-card-3d {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 
 /* Адаптивность */
 @media (max-width: 768px) {
@@ -2296,6 +2317,24 @@ document.getElementById('surveyModal')?.addEventListener('click', (e) => {
 
 updateButtons();
 updateProgressBar();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const cards = document.querySelectorAll('.theater-card, .theater-card-3d');
+  
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target); 
+      }
+    });
+  }, {
+    threshold: 0.15,              
+    rootMargin: '0px 0px -60px 0px' 
+  });
+
+  cards.forEach(card => observer.observe(card));
+});
     </script>
 </body>
 </html>
